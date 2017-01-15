@@ -1,0 +1,43 @@
+Breakout Game
+Henry Taylor
+
+1) Out of all the variants, Centipong was my favorite because it was an
+advancement of the original game as it had essentially the same elements,
+but was made more difficult using the moving platforms. I like its simplicity --
+it doesn't try to do too much and the result is that its a good flowing, simple
+game unlike some of the others. 
+
+
+My game:
+
+I want to keep it simplistic, but fun for Duke students. I want to do a Duke 
+basketball spinoff -- with the end goal (if you win), the National Championship.
+
+2) For different levels, there will be different obstacles. Level 1 is a normal level
+with a normal sized movable platform (which will be a basketball court or a Duke 
+jersey) with the 3 lays of blocks protecting the goal for the ACC Championship.
+the second level (to get into semi finals), "Your star player has been injured, but is still playing" -- so the 
+movable platform will be slower. The last level (championship)-- the opposing team has pumped up the 
+balls, making it move must faster as well as a smaller platform from level 2. 
+
+3 and 4) I want to make 3 main blocks representing different teams: UNC, Kentucky, and probably Kansas.
+These all break after different number of hits. Then will be three special blocks for powerups scattered in the
+main block of blocks:
+	ref block: lets you get away with a double dribble: creates two balls temporarily (when
+				you let the second one get by you, you lose a life)
+	hot streak block: one of your players gets hot: slows the ball down for a certain amount of time
+	foul: catches the ball then click to release (straight) a certain number of times -- probably 2
+	
+5) 1-3: goes to certain levels
+	W: count it as a W! takes out the lowest level of bricks that you have remaining
+	R: resent ball and paddle
+	L: extra lives
+	D: win it all!
+	Z: instantly lose
+	M: man up - get two platforms
+	T: technical (catch and shoot straight on every shot)
+	
+6) At the end, once you have gotten past the blocks, I want to add a net that moves
+back and forth across the stream. you have to make the ball in the net to win that level
+
+ 
