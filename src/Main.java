@@ -1,7 +1,9 @@
 
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application{
@@ -13,6 +15,8 @@ public class Main extends Application{
 		
 		myBreakout = new Breakout();
 		s.setTitle(myBreakout.retrieveTitle());
+		//Group root = new Group();
+		//Scene scene = new Scene(root, SIZE, SIZE, Color.TAN);
 		Scene scene = myBreakout.init(SIZE, s);
 		s.setScene(scene);
 		s.show();

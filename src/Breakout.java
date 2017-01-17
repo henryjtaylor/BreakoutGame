@@ -2,8 +2,11 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,6 +47,7 @@ public class Breakout{
 	}
 	
 	private Scene setupGame() {
+		root = new Group();
 		myScene = new Scene(root, SIZE, SIZE, Color.TAN);
 		//myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
 		//myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
@@ -53,27 +57,98 @@ public class Breakout{
 	private void informationPage() {
 		root.getChildren().clear();
 		makeIntroLabel();
+		makeIntroButton();
 	}
 	
-	private void positionLabel(int x, int y, Group r, Label label) {
+	private void directionPage() {
+		root.getChildren().clear();
+		makeDirectionLabel();
+		makeDirectionButton();
+	}
+	
+	private void firstLevel() {
+		root.getChildren().clear();
+		
+	}
+	
+	private void makeIntroLabel() {
+		Label label = new Label(getIntro());
+		positionLabel(SIZE/10, SIZE/10, root, label);
+	}
+	
+	private void makeDirectionLabel() {
+		Label label = new Label(getDirect());
+		positionLabel(SIZE/10, SIZE/10, root, label);
+		
+	}
+	
+	
+	private void makeIntroButton() {
+		Button button = makeButton(SIZE/2, SIZE-50, root, "NEXT");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				directionPage();
+			}
+		});
+	}
+	
+	private void makeDirectionButton() {
+		Button button = makeButton(SIZE/2, SIZE-50, root, "LET'S GO!");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				root.getChildren().clear();
+				Label label = new Label("GET READY!");
+				positionLabel(SIZE/10, SIZE/10, root, label);
+				firstLevel();
+			}
+		});
+	}
+	
+	
+	private void positionLabel(double x, double y, Group r, Label label) {
 		label.setTranslateX(x);
 		label.setTranslateY(y);
 		r.getChildren().add(label);
 	}
-	private void makeIntroLabel() {
-		Label label = new Label(getIntro());
-		positionLabel(SIZE/2, SIZE/2, root, label);
+	
+	private Button makeButton(double x, double y, Group r, String str) {
+		Button button = new Button();
+		button.setTranslateX(x-100/2);
+		button.setTranslateY(y);
+		root.getChildren().add(button);
+		button.setText(str);
+		button.setMaxWidth(100);
+		return button;
 	}
+	
+	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private String getIntro() {
-		String str = "Welcome Coach of the Duke Basketball Team! You are beginning\n"
-				+ "the long road to the National Championship, starting with the\n"
-				+ "ACC tournament, then moving on to the semi finals of March Madness\n"
-				+ "and culminating with the Championship game! Unforunately, you are\n"
-				+ "going to have to face three of Dukes top opponents:\n"
-				+ "				Kansas, Kentucky, and UNC\n";
+		String str = "Welcome Coach of the Duke Basketball Team!\n"
+				+ "You are beginning the long road to the National\n"
+				+ "Championship, starting with the ACC tournament,\n"
+				+ "then moving on to the semi finals of March Madness\n"
+				+ "and culminating with the Championship game!\n"
+				+ "Unforunately, you are going to have to face\n"
+				+ "three of Dukes top opponents:\n"
+				+ "		Kansas, Kentucky, and UNC\n";
 		return str;
 	}
 	
+	private String getDirect() {
+		String str = "To play, Use the left and right arrow keys\n"
+				+ "to move the platform left and right. Make sure\n"
+				+ "			the ball doesn't get by you!";
+		return str;
+	}
 
 }
