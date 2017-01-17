@@ -1,11 +1,11 @@
 import javafx.scene.image.ImageView;
 
-public class Platform extends ImageView{
-	
+
+public class Block extends ImageView{
 	
 	private int myHits;
 
-	public Platform(int k) {
+	public Block(int k) {
 		myHits = k;
 	}
 	
@@ -14,6 +14,4 @@ public class Platform extends ImageView{
 		return myHits;
 	}
 
-	
-	
 }

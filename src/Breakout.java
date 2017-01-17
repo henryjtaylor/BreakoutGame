@@ -68,7 +68,10 @@ public class Breakout{
 	
 	private void firstLevel() {
 		root.getChildren().clear();
-		
+		Levels firstLevel = new Levels();
+		myScene = firstLevel.init(myScene, 1, SIZE);
+		myStage.setScene(myScene);
+		myStage.show();
 	}
 	
 	private void makeIntroLabel() {
