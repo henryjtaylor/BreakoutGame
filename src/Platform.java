@@ -1,19 +1,14 @@
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 
-public class Platform extends ImageView{
+public class Platform extends Rectangle{
+	private int VERT;
 	
-	
-	private int myHits;
-
-	public Platform(int k) {
-		myHits = k;
+	public void Rectangle(int size) {
+		VERT = size;
 	}
 	
-	public int wasHit() {
-		myHits -= 1;
-		return myHits;
+	public int positionY() {
+		return VERT;
 	}
-
-	
-	
 }
