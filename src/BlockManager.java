@@ -5,13 +5,15 @@ public class BlockManager {
 	private Block[] KENT_BLOCKS;
 	private Block[] KANSAS_BLOCKS;
 	private int SIZE;
+	private double BALL_WIDTH;
 	
 	
-	public BlockManager(int number, int size) {
+	public BlockManager(int number, int size, double width) {
 		UNC_BLOCKS = new Block[number];
 		KENT_BLOCKS = new Block[number];
 		KANSAS_BLOCKS = new Block[number];
 		SIZE = size;
+		BALL_WIDTH = width;
 	}
 	
 	public void addBrick(int position, Block block) {
@@ -38,13 +40,20 @@ public class BlockManager {
 	
 	private Block checkCollision(double x, double y, Block[] blockList) {
 		double width = SIZE/blockList.length;
-		Double number = x/width;
-		int index = number.intValue();
-		if (blockList[index].checkHits() == 0) {
-			return null;
+		Double firstIndex = x/width;
+		Double secondIndex = (x+BALL_WIDTH)/width;
+		int indexOne = firstIndex.intValue();
+		int indexTwo = secondIndex.intValue();
+		if (blockList[indexOne].checkHits() == 0) {
+			if (blockList[indexTwo].checkHits() != 0) {
+				blockList[indexTwo].wasHit();
+				return blockList[indexTwo];
+			} else {
+				return null;
+			}
 		}
-		blockList[index].wasHit();
-		return blockList[index];
+		blockList[indexOne].wasHit();
+		return blockList[indexOne];
 	}
 	
 	

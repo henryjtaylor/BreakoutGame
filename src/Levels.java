@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 
@@ -28,7 +29,7 @@ public class Levels {
     private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private int LEVEL;
-    private int BALL_SPEED = 70;
+    private int BALL_SPEED;
     private int X_DIRECTION = 1;
     private int Y_DIRECTION = 1;
     private int PLATFORM_DIRECTION = 0;
@@ -44,7 +45,7 @@ public class Levels {
     	SIZE = size;
     	LEVEL = level;
     	myScene = s;
-    	NUMBER_OF_BLOCKS = 7;
+    	NUMBER_OF_BLOCKS = 10;
     	myScene = setupLevel();
 
     	
@@ -60,11 +61,19 @@ public class Levels {
     private Scene setupLevel() {
     	root = new Group();
     	myScene = new Scene(root, SIZE, SIZE, Color.WHITE);
-    	BLOCKMANAGER = new BlockManager(NUMBER_OF_BLOCKS, SIZE);
     	
-    	setBlocks(NUMBER_OF_BLOCKS);
     	makePlatform();
     	makeBall();
+    	
+    	if (LEVEL == 3) {
+    		BALL_SPEED = 100;
+    	} else {
+    		BALL_SPEED = 75;
+    	}
+    	
+    	BLOCKMANAGER = new BlockManager(NUMBER_OF_BLOCKS, SIZE, BBALL.getFitWidth());
+    	
+    	setBlocks(NUMBER_OF_BLOCKS);
     	
     	myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     	//myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
@@ -122,7 +131,11 @@ public class Levels {
     	if (!(hitBrick.checkHits() == 0)) {
     		root.getChildren().add(hitBrick);
     	}
+    	//if (BBALL.getY() < hitBrick.getY()+hitBrick.getFitHeight() && BBALL.getY() > hitBrick.getY()) {
+    	//	return;	
+    	//}
     	Y_DIRECTION = Y_DIRECTION*-1;
+    	return;
     }
     
     
@@ -156,9 +169,9 @@ public class Levels {
     private void makePlatform() {
     	Platform platform = new Platform();
     	if (LEVEL == 1) {
-    		platform.setWidth(SIZE/5);
-    	} else {
     		platform.setWidth(SIZE/4);
+    	} else {
+    		platform.setWidth(SIZE/5);
     	}
     	platform.setHeight(10);
     	platform.setX(SIZE/2);
@@ -170,7 +183,7 @@ public class Levels {
 
     //need to somehow figure how to take in formation from file, etc.
     private void setBlocks(int num) {
-    	int width = calcBlockSize(num);
+    	int width = SIZE/num;
     	int height = SIZE/20;
     	Image unc = new Image(getClass().getClassLoader().getResourceAsStream(UNC));
     	Image kentucky = new Image(getClass().getClassLoader().getResourceAsStream(KENTUCKY));
@@ -194,7 +207,7 @@ public class Levels {
     	}
     	for (int i = 0; i < number; i++) {
     		Block block = new Block(hits, image);
-    		block.prefWidth(width);
+    		block.setFitWidth(width);
     		block.setFitHeight(height);
     		block.setX(x);
     		block.setY(y);
@@ -205,8 +218,4 @@ public class Levels {
     	}
     	
     }
-    private int calcBlockSize(int num) {
-    	return (SIZE/num);
-    }
-
 }

@@ -29,7 +29,6 @@ public class Breakout{
     private final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private final int KEY_INPUT_SPEED = 5;
     private final double GROWTH_RATE = 1.1;
-    private int BOUNCER_SPEED = 30;
     private Stage myStage;
     private Scene myScene;
     private Group root;
