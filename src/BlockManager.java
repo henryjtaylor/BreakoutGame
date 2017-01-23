@@ -46,7 +46,7 @@ public class BlockManager {
 		int indexOne = firstIndex.intValue();
 		int indexTwo = secondIndex.intValue();
 		if (blockList[indexOne].checkHits() == 0) {
-			if (indexTwo <= blockList.length) {
+			if (indexTwo <= blockList.length-1) {
 				if (blockList[indexTwo].checkHits() != 0) {
 					blockList[indexTwo].wasHit();
 					return blockList[indexTwo];

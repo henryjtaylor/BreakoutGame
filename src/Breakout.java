@@ -1,27 +1,17 @@
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Breakout{
 	
 	private final String TITLE = "Breakout to the Championship";
-    private final String BALL_IMAGE = "ball.gif";
     private int SIZE;
     private final Paint BACKGROUND = Color.SANDYBROWN;
     private Stage myStage;
@@ -156,23 +146,6 @@ public class Breakout{
 	}
 	
 	
-	private void pauseScreen(int seconds) {
-		long time = System.currentTimeMillis();
-		long end = time + (seconds * 1000);
-		while (time < end) {
-			time = System.currentTimeMillis();
-		}
-		return;
-	}
-	
-
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	private String getIntro() {
@@ -191,7 +164,18 @@ public class Breakout{
 		String str = "To play, Use the left and right arrow keys\n"
 				+ "to move the platform left and right. Make sure\n"
 				+ "the ball doesn't get by you! There are also three\n"
-				+ "powerups available, as well as numerous cheat codes!\n";
+				+ "powerups available, as well as numerous cheat codes!\n"
+				+ "\n"
+				+ "\n"
+				+ "Cheat Codes:\n"
+				+ "W: Win Instantly\n"
+				+ "R: Reset\n"
+				+ "L: Extra Lives\n"
+				+ "Z: Lost Instantly\n"
+				+ "M: Get two platforms\n"
+				+ "T: Sticky platforms\n"
+				+ "Space: Release stuck ball\n"
+				+ "1-3: Go to that level";
 		return str;
 	}
 

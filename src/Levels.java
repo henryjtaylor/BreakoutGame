@@ -4,16 +4,13 @@ import com.sun.javafx.tk.Toolkit;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.ObservableList;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -21,9 +18,9 @@ import javafx.util.Duration;
 
 public class Levels {
 	
-	private final String UNC = "072a0aedf68d60bba41a739845a47fe8.jpg.png";//"brick2.gif";
-	private final String KENTUCKY = "images.png";//"brick3.gif";
-	private final String KANSAS = "kent.png";//"brick4.gif";
+	private final String UNC = "072a0aedf68d60bba41a739845a47fe8.jpg.png";
+	private final String KENTUCKY = "images.png";
+	private final String KANSAS = "kent.png";
 	private final String BALL = "large-basketball.gif";
 	
 	
@@ -106,9 +103,7 @@ public class Levels {
     	setBlocks(NUMBER_OF_BLOCKS);
     	
     	myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-    	//myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
-    	
-    	
+ 
     	return myScene;
     }
     
@@ -140,7 +135,6 @@ public class Levels {
      
     private void moveStuckBall(double time) {
     	BBALL.setX(BBALL.getX() + PLATFORM_DIRECTION * time * PLATFORM_SPEED);
-    	//BBALL.setY(BBALL.getY() + BALL_SPEED * time * Y_DIRECTION);
     	
     }
     private void movePlatform(double time) {
@@ -225,6 +219,27 @@ public class Levels {
     	}
     }
     
+    //only one powerup falling at a time
+    private void checkForPowerup(Block hitBrick) {
+    	if (hitBrick.getPowerup() == 0) {
+    		POWERUP = new Powerup(0);
+    	} else {
+    		if (POWERUP.getPower() == 0) {
+    			POWERUP = new Powerup(hitBrick.getPowerup());
+        		if (!(POWERUP.getImage() == null)) {
+            		ImageView image = POWERUP.getImage();
+            		image.setX(hitBrick.getX() + hitBrick.getFitWidth()/2);
+            		image.setY(hitBrick.getY() + hitBrick.getFitHeight()/2);
+            		image.setFitHeight(20);
+            		image.setFitWidth(20);
+            		root.getChildren().add(image);
+            	}
+        		
+        	}
+    		
+    	}
+    }
+    
     private void checkPowerCollision() {
     	ImageView power = POWERUP.getImage();
     	if (power.getY() > SIZE) {
@@ -279,30 +294,9 @@ public class Levels {
     	} else {
     		Y_DIRECTION = Y_DIRECTION*-1;
     	}
-    	//Y_DIRECTION = Y_DIRECTION*-1;
     	return;
     }
     
-    //only one powerup falling at a time
-    private void checkForPowerup(Block hitBrick) {
-    	if (hitBrick.getPowerup() == 0) {
-    		POWERUP = new Powerup(0);
-    	} else {
-    		if (POWERUP.getPower() == 0) {
-    			POWERUP = new Powerup(hitBrick.getPowerup());
-        		if (!(POWERUP.getImage() == null)) {
-            		ImageView image = POWERUP.getImage();
-            		image.setX(hitBrick.getX() + hitBrick.getFitWidth()/2);
-            		image.setY(hitBrick.getY() + hitBrick.getFitHeight()/2);
-            		image.setFitHeight(20);
-            		image.setFitWidth(20);
-            		root.getChildren().add(image);
-            	}
-        		
-        	}
-    		
-    	}
-    }
     
     private void makePointBar() {
     	myPoints = new Label("0");
