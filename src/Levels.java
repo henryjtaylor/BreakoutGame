@@ -1,15 +1,20 @@
 
+import com.sun.javafx.tk.FontLoader;
+import com.sun.javafx.tk.Toolkit;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
@@ -24,7 +29,10 @@ public class Levels {
 	
 	private int SIZE;
 	private Scene myScene;
+	private Scene mainScene;
 	private Group root;
+	private Breakout BREAKOUT;
+	private Stage myStage;
 	private final int FRAMES_PER_SECOND = 60;
     private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -35,17 +43,23 @@ public class Levels {
     private int PLATFORM_DIRECTION = 0;
     private int PLATFORM_SPEED = 200;
     private int NUMBER_OF_BLOCKS;
+    private int NUMBER_OF_LIVES;
+    private ImageView[] LIVES;
     
     private Platform PLATFORM; 
     private ImageView BBALL;
     private BlockManager BLOCKMANAGER;
 
     
-    public Scene init(Scene s, int level, int size) {
+    public Scene init(Scene s, Stage stage, int level, int size, Breakout b) {
+    	BREAKOUT = b;
     	SIZE = size;
     	LEVEL = level;
-    	myScene = s;
-    	NUMBER_OF_BLOCKS = 10;
+    	mainScene = s;
+    	NUMBER_OF_BLOCKS = 2;
+    	NUMBER_OF_LIVES = 3;
+    	myStage = stage;
+    	LIVES = new ImageView[NUMBER_OF_LIVES];
     	myScene = setupLevel();
 
     	
@@ -64,6 +78,7 @@ public class Levels {
     	
     	makePlatform();
     	makeBall();
+    	makeLives();
     	
     	if (LEVEL == 3) {
     		BALL_SPEED = 100;
@@ -119,9 +134,13 @@ public class Levels {
     	if (BBALL.getY() <= 0) {
     		Y_DIRECTION = Y_DIRECTION * -1;
     	}
+    	if (BBALL.getY() > SIZE) {
+    		lostLife();
+    	}
     	Block hitBrick = BLOCKMANAGER.checkBricks(BBALL.getX(), BBALL.getY());
     	changeBricks(hitBrick);
     }
+    
     
     private void changeBricks(Block hitBrick) {
     	if (hitBrick == null) {
@@ -131,39 +150,59 @@ public class Levels {
     	if (!(hitBrick.checkHits() == 0)) {
     		root.getChildren().add(hitBrick);
     	}
-    	//if (BBALL.getY() < hitBrick.getY()+hitBrick.getFitHeight() && BBALL.getY() > hitBrick.getY()) {
-    	//	return;	
-    	//}
-    	Y_DIRECTION = Y_DIRECTION*-1;
+    	if (BBALL.getX() <= hitBrick.getX() && BBALL.getY() < hitBrick.getY()) {
+    		X_DIRECTION *= -1;
+    		return;	
+    	} else {
+    		Y_DIRECTION = Y_DIRECTION*-1;
+    	}
+    	//Y_DIRECTION = Y_DIRECTION*-1;
     	return;
     }
     
     
-    
-    //alternative way to move platform
-    /*
-    private void movePlatform(int direction) {
-    	if (direction > 0) {
-    		if (PLATFORM.getX() >= 0) {
-    			PLATFORM.setX(PLATFORM.getX() - 10);
-    		}
-    	} else {
-    		if (PLATFORM.getX() + PLATFORM.getHeight() < SIZE) {
-    			PLATFORM.setX(PLATFORM.getX() + 10);
-    		}
+    private void makeLives() {
+    	Label livesLeft = new Label("Lives Left:");	
+    	livesLeft.setTranslateX(10);//10);
+    	livesLeft.setTranslateY(SIZE-livesLeft.getHeight() - 20);
+    	root.getChildren().add(livesLeft);
+    	Image ball = new Image(getClass().getClassLoader().getResourceAsStream(BALL));
+    	FontLoader lengthCalc = Toolkit.getToolkit().getFontLoader();
+    	double liveX= livesLeft.getTranslateX() + lengthCalc.computeStringWidth(livesLeft.getText(), livesLeft.getFont()) + 10;
+    	for (int i = 0; i < NUMBER_OF_LIVES; i++) {
+    		ImageView ballView = setBallPosition(liveX, livesLeft.getTranslateY(), 15, 15, new ImageView(ball));
+    		root.getChildren().add(ballView);
+    		liveX += ballView.getFitWidth() + 5;
+    		LIVES[i] = ballView;
     	}
+    	
     }
-    */
+    
+    private void lostLife() {
+    	if (NUMBER_OF_LIVES == 0) {
+    		returnToMain();
+    	}
+    	NUMBER_OF_LIVES -= 1;
+    	root.getChildren().remove(LIVES[NUMBER_OF_LIVES]);
+    	BALL_SPEED = 0;
+    	BBALL.setX(SIZE/2);
+    	BBALL.setY(SIZE/2);
+    }
+
     
     private void makeBall() {
     	Image ball = new Image(getClass().getClassLoader().getResourceAsStream(BALL));
-    	ImageView ballView = new ImageView(ball);
-    	ballView.setX(SIZE/2);
-    	ballView.setY(SIZE/2);
-    	ballView.setFitWidth(20);
-    	ballView.setFitHeight(20);
+    	ImageView ballView = setBallPosition(SIZE/2, SIZE/2, 20, 20, new ImageView(ball));
     	BBALL = ballView;
     	root.getChildren().add(BBALL);
+    }
+    
+    private ImageView setBallPosition(double x, double y, int width, int height, ImageView ball) {
+    	ball.setX(x);
+    	ball.setY(y);
+    	ball.setFitWidth(width);
+    	ball.setFitHeight(height);
+    	return ball;
     }
     
     private void makePlatform() {
@@ -175,7 +214,7 @@ public class Levels {
     	}
     	platform.setHeight(10);
     	platform.setX(SIZE/2);
-    	platform.setY(SIZE-platform.getHeight()-10);
+    	platform.setY(SIZE-platform.getHeight()-30);
     	PLATFORM = platform;
     	root.getChildren().add(PLATFORM);
     }
@@ -217,5 +256,15 @@ public class Levels {
     		
     	}
     	
+    }
+    
+    private void returnToMain() {
+    	if (NUMBER_OF_LIVES == 0) {
+    		BREAKOUT.handlePlayerLost();
+    	} else {
+    		BREAKOUT.wonLevel(LEVEL);
+    	}
+    	myStage.setScene(mainScene);
+    	myStage.show();
     }
 }

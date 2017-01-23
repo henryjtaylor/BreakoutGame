@@ -25,8 +25,6 @@ public class Breakout{
     private int SIZE;
     private final Paint BACKGROUND = Color.WHITE;
     private final int FRAMES_PER_SECOND = 60;
-    private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private final int KEY_INPUT_SPEED = 5;
     private final double GROWTH_RATE = 1.1;
     private Stage myStage;
@@ -65,11 +63,11 @@ public class Breakout{
 		makeDirectionButton();
 	}
 	
-	private void firstLevel() {
+	private void selectLevel(int level) {
 		root.getChildren().clear();
-		Levels firstLevel = new Levels();
-		myScene = firstLevel.init(myScene, 2, SIZE);
-		myStage.setScene(myScene);
+		Levels setLevel = new Levels();
+		Scene sceneTwo = setLevel.init(myScene, myStage, level, SIZE, this);
+		myStage.setScene(sceneTwo);
 		myStage.show();
 	}
 	
@@ -95,13 +93,12 @@ public class Breakout{
 	}
 	
 	private void makeDirectionButton() {
-		Button button = makeButton(SIZE/2, SIZE-50, root, "LET'S GO!");
+		Button button = makeButton(SIZE/2, SIZE-50, root, "LEVEL ONE!");
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				
 				root.getChildren().clear();
-				Label label = new Label("GET READY!");
-				positionLabel(SIZE/10, SIZE/10, root, label);
-				firstLevel();
+				selectLevel(1);
 			}
 		});
 	}
@@ -117,12 +114,42 @@ public class Breakout{
 		Button button = new Button();
 		button.setTranslateX(x-100/2);
 		button.setTranslateY(y);
-		root.getChildren().add(button);
+		//r.getChildren().add(button);
 		button.setText(str);
 		button.setMaxWidth(100);
+		r.getChildren().add(button);
 		return button;
 	}
 	
+	public void wonLevel(int level) {
+		root.getChildren().clear();
+		int newLevel = level +1;
+		Label label = new Label("LEVEL " + Integer.toString(newLevel));
+		positionLabel(SIZE/2, SIZE/2, root, label);
+		Button button = makeButton(SIZE/2, SIZE-50, root, "LET'S GO!");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				
+				root.getChildren().clear();
+				selectLevel(newLevel);
+			}
+		});
+		
+	}
+	
+	public void handlePlayerLost(){
+		
+	}
+	
+	
+	private void pauseScreen(int seconds) {
+		long time = System.currentTimeMillis();
+		long end = time + (seconds * 1000);
+		while (time < end) {
+			time = System.currentTimeMillis();
+		}
+		return;
+	}
 	
 
 	
