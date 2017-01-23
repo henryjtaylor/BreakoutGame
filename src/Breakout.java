@@ -30,6 +30,7 @@ public class Breakout{
     private Stage myStage;
     private Scene myScene;
     private Group root;
+    private Levels myLevel;
     
     
 
@@ -38,6 +39,7 @@ public class Breakout{
 	public Scene init(int size, Stage s) {
 		myStage = s;
 		SIZE = size;
+		myLevel = new Levels();
 		myScene = setupGame();
 		informationPage();
 		return myScene;
@@ -65,8 +67,8 @@ public class Breakout{
 	
 	private void selectLevel(int level) {
 		root.getChildren().clear();
-		Levels setLevel = new Levels();
-		Scene sceneTwo = setLevel.init(myScene, myStage, level, SIZE, this);
+		//Levels setLevel = new Levels();
+		Scene sceneTwo = myLevel.init(myScene, myStage, level, SIZE, this);
 		myStage.setScene(sceneTwo);
 		myStage.show();
 	}
@@ -138,6 +140,15 @@ public class Breakout{
 	}
 	
 	public void handlePlayerLost(){
+		root.getChildren().clear();
+		Label label = new Label("GAME OVER");
+		positionLabel(SIZE/2, SIZE/2, root, label);
+		Button button = makeButton(SIZE/2, SIZE-50, root, "PLAY AGAIN");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				directionPage();
+			}
+		});
 		
 	}
 	

@@ -37,6 +37,7 @@ public class BlockManager {
 		}
 		return hitBlock;
 	}
+
 	
 	private Block checkCollision(double x, double y, Block[] blockList) {
 		double width = SIZE/blockList.length;
