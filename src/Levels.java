@@ -21,13 +21,14 @@ import javafx.util.Duration;
 
 public class Levels {
 	
-	private final String UNC = "brick2.gif";
-	private final String KENTUCKY = "brick3.gif";
-	private final String KANSAS = "brick4.gif";
+	private final String UNC = "072a0aedf68d60bba41a739845a47fe8.jpg.png";//"brick2.gif";
+	private final String KENTUCKY = "images.png";//"brick3.gif";
+	private final String KANSAS = "kent.png";//"brick4.gif";
 	private final String BALL = "large-basketball.gif";
 	
 	
 	private int SIZE;
+	private boolean STUCK;
 	private Label myPoints;
 	private Scene myScene;
 	private Scene mainScene;
@@ -53,6 +54,7 @@ public class Levels {
     private ImageView BBALL;
     private BlockManager BLOCKMANAGER;
     private Timeline ANIMATION;
+    private Powerup POWERUP;
 
     
     public Scene init(Scene s, Stage stage, int level, int size, Breakout b) {
@@ -66,6 +68,7 @@ public class Levels {
     	determineBlocks();
     	HIT_BLOCKS = 0;
     	NUMBER_OF_LIVES = 3;
+    	POWERUP = new Powerup(0);
     	myStage = stage;
     	LIVES = new ImageView[NUMBER_OF_LIVES];
     	myScene = setupLevel();
@@ -111,18 +114,35 @@ public class Levels {
     
     private void move(double time) {
     	
-    	moveBall(time);
+    	if (STUCK) {
+    		moveStuckBall(time);
+    	} else {
+    		moveBall(time);
+    	}
     	movePlatform(time);
-    	
+    	if (POWERUP.getPower() != 0) {
+    		movePowerup(time);
+    		checkPowerCollision();
+    	}
     	handleBallCollision();
     	PLATFORM_DIRECTION = 0;
+    }
+    
+    private void movePowerup(double time) {
+    	ImageView image = POWERUP.getImage();
+    	image.setY(image.getY() + BALL_SPEED/2 * time);	
     }
     
     private void moveBall(double time) {
     	BBALL.setX(BBALL.getX() + BALL_SPEED * time * X_DIRECTION);
     	BBALL.setY(BBALL.getY() + BALL_SPEED * time * Y_DIRECTION);
     }
-    
+     
+    private void moveStuckBall(double time) {
+    	BBALL.setX(BBALL.getX() + PLATFORM_DIRECTION * time * PLATFORM_SPEED);
+    	//BBALL.setY(BBALL.getY() + BALL_SPEED * time * Y_DIRECTION);
+    	
+    }
     private void movePlatform(double time) {
     	PLATFORM.setX(PLATFORM.getX() + PLATFORM_DIRECTION * time * PLATFORM_SPEED);
     	if (PLATFORM2 != null) {
@@ -148,21 +168,31 @@ public class Levels {
     		NUMBER_OF_LIVES = 0;
     		returnToMain();
     	} else if (code == KeyCode.M) {
-    		PLATFORM2 = makePlatform(2);
+    		if (PLATFORM2 == null) {
+    			PLATFORM2 = makePlatform(2);
+    		}
     	} else if (code == KeyCode.R) {
     		reset();
     	} else if (code == KeyCode.L) {
     		refillLives();
+    	} else if (code == KeyCode.T) {
+    		PLATFORM.makeSticky();
+    		if (PLATFORM2 != null) {
+    			PLATFORM2.makeSticky();
+    		}
+    	} else if (code == KeyCode.SPACE) {
+    		STUCK = false;
+    		Y_DIRECTION = -1;
+    	} else if (code == KeyCode.W){
+    		LEVEL = 3; 
+    		returnToMain();
     	}
     }
     
     private void handleBallCollision() {
-    	if (BBALL.getY() + BBALL.getFitHeight() >= PLATFORM.getY()) {
-    		if (BBALL.getX() + BBALL.getFitWidth()/2 <= PLATFORM.getX() + PLATFORM.getWidth()) {
-    			if (BBALL.getX() + BBALL.getFitWidth()/2 >= PLATFORM.getX()) {
-    				Y_DIRECTION = Y_DIRECTION * -1;
-    			}
-    		}
+    	platformCollision(PLATFORM, BBALL);
+    	if (PLATFORM2 != null) {
+    		platformCollision(PLATFORM2, BBALL);
     	}
     	if (BBALL.getX() <= 0) {
     		X_DIRECTION = X_DIRECTION * -1;
@@ -182,6 +212,50 @@ public class Levels {
     }
     
     
+    private void platformCollision(Platform p, ImageView i) {
+    	if (i.getY() + i.getFitHeight() >= p.getY()) {
+    		if (i.getX() + i.getFitWidth()/2 <= p.getX() + p.getWidth()) {
+    			if (i.getX() + i.getFitWidth()/2 >= p.getX()) {
+					Y_DIRECTION = Y_DIRECTION * -1;
+    				if (p.isSticky()) {
+    					STUCK = true;
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    private void checkPowerCollision() {
+    	ImageView power = POWERUP.getImage();
+    	if (power.getY() > SIZE) {
+    		root.getChildren().remove(POWERUP.getImage());
+    		POWERUP = new Powerup(0);
+    	}
+    	if (power.getY() + power.getFitHeight()+5 >= PLATFORM.getY()){
+			if (power.getX() >= PLATFORM.getX()) {
+    			if (power.getX() + power.getFitWidth() <= PLATFORM.getX() + PLATFORM.getWidth()) {
+    				handlePowerCollision();
+    			}
+    		}
+    		
+    	}
+    	
+    }
+    private void handlePowerCollision() {
+    	root.getChildren().remove(POWERUP.getImage());
+    	if (POWERUP.getPower() == 1) {
+    		PLATFORM_SPEED += 50;
+    	} else if (POWERUP.getPower() == 2) {
+    		PLATFORM2 = makePlatform(2);
+    	} else {
+    		PLATFORM.makeSticky();
+    		if (PLATFORM2 != null) {
+    			PLATFORM2.makeSticky();
+    		}
+    	}
+    	POWERUP = new Powerup(0);
+    }
+    
     private void changeBricks(Block hitBrick) {
     	if (hitBrick == null) {
     		return;
@@ -194,6 +268,10 @@ public class Levels {
     	root.getChildren().remove(hitBrick);
     	if (!(hitBrick.checkHits() == 0)) {
     		root.getChildren().add(hitBrick);
+    	} else {
+    		if (POWERUP.getPower() == 0) {
+    			checkForPowerup(hitBrick);
+    		}
     	}
     	if (BBALL.getX() <= hitBrick.getX() && BBALL.getY() < hitBrick.getY()) {
     		X_DIRECTION *= -1;
@@ -203,6 +281,27 @@ public class Levels {
     	}
     	//Y_DIRECTION = Y_DIRECTION*-1;
     	return;
+    }
+    
+    //only one powerup falling at a time
+    private void checkForPowerup(Block hitBrick) {
+    	if (hitBrick.getPowerup() == 0) {
+    		POWERUP = new Powerup(0);
+    	} else {
+    		if (POWERUP.getPower() == 0) {
+    			POWERUP = new Powerup(hitBrick.getPowerup());
+        		if (!(POWERUP.getImage() == null)) {
+            		ImageView image = POWERUP.getImage();
+            		image.setX(hitBrick.getX() + hitBrick.getFitWidth()/2);
+            		image.setY(hitBrick.getY() + hitBrick.getFitHeight()/2);
+            		image.setFitHeight(20);
+            		image.setFitWidth(20);
+            		root.getChildren().add(image);
+            	}
+        		
+        	}
+    		
+    	}
     }
     
     private void makePointBar() {
@@ -299,7 +398,7 @@ public class Levels {
 
     private void setBlocks(int num) {
     	int width = SIZE/num;
-    	int height = SIZE/20;
+    	int height = SIZE/15;
     	Image unc = new Image(getClass().getClassLoader().getResourceAsStream(UNC));
     	Image kentucky = new Image(getClass().getClassLoader().getResourceAsStream(KENTUCKY));
     	Image kansas = new Image(getClass().getClassLoader().getResourceAsStream(KANSAS));

@@ -23,10 +23,7 @@ public class Breakout{
 	private final String TITLE = "Breakout to the Championship";
     private final String BALL_IMAGE = "ball.gif";
     private int SIZE;
-    private final Paint BACKGROUND = Color.WHITE;
-    private final int FRAMES_PER_SECOND = 60;
-    private final int KEY_INPUT_SPEED = 5;
-    private final double GROWTH_RATE = 1.1;
+    private final Paint BACKGROUND = Color.SANDYBROWN;
     private Stage myStage;
     private Scene myScene;
     private Group root;
@@ -47,9 +44,7 @@ public class Breakout{
 	
 	private Scene setupGame() {
 		root = new Group();
-		myScene = new Scene(root, SIZE, SIZE, Color.TAN);
-		//myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-		//myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+		myScene = new Scene(root, SIZE, SIZE, BACKGROUND);
 		return myScene;
 	}
 	
@@ -125,20 +120,28 @@ public class Breakout{
 	
 	public void wonLevel(int level) {
 		root.getChildren().clear();
-		int newLevel = level +1;
-		Label label = new Label("LEVEL " + Integer.toString(newLevel));
-		positionLabel(SIZE/2, SIZE/2, root, label);
-		Button button = makeButton(SIZE/2, SIZE-50, root, "LET'S GO!");
-		button.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				
-				root.getChildren().clear();
-				selectLevel(newLevel);
-			}
-		});
+		if (level == 3) {
+			handleGameOver();
+		} else {
+			int newLevel = level +1;
+			Label label = new Label("LEVEL " + Integer.toString(newLevel));
+			positionLabel(SIZE/2, SIZE/2, root, label);
+			Button button = makeButton(SIZE/2, SIZE-50, root, "LET'S GO!");
+			button.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent event) {
+					
+					root.getChildren().clear();
+					selectLevel(newLevel);
+				}
+			});
+		}
 		
 	}
 	
+	public void handleGameOver() {
+		Label label = new Label("YOU WON! GO DUKE!");
+		positionLabel(SIZE/2, SIZE/2, root, label);
+	}
 	public void handlePlayerLost(){
 		root.getChildren().clear();
 		Label label = new Label("GAME OVER");
@@ -187,7 +190,8 @@ public class Breakout{
 	private String getDirect() {
 		String str = "To play, Use the left and right arrow keys\n"
 				+ "to move the platform left and right. Make sure\n"
-				+ "			the ball doesn't get by you!";
+				+ "the ball doesn't get by you! There are also three\n"
+				+ "powerups available, as well as numerous cheat codes!\n";
 		return str;
 	}
 

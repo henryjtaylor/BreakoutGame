@@ -46,11 +46,13 @@ public class BlockManager {
 		int indexOne = firstIndex.intValue();
 		int indexTwo = secondIndex.intValue();
 		if (blockList[indexOne].checkHits() == 0) {
-			if (blockList[indexTwo].checkHits() != 0) {
-				blockList[indexTwo].wasHit();
-				return blockList[indexTwo];
-			} else {
-				return null;
+			if (indexTwo <= blockList.length) {
+				if (blockList[indexTwo].checkHits() != 0) {
+					blockList[indexTwo].wasHit();
+					return blockList[indexTwo];
+				} else {
+					return null;
+				}
 			}
 		}
 		blockList[indexOne].wasHit();
