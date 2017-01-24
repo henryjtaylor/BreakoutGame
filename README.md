@@ -1,7 +1,6 @@
-This is my version of Breakout. Instead of a typical ball and brick format, we are a Duke basketball team trying to win the National Championship with two obstacles: the ACC championship and the Semi-finals. In each of these games, you are facing off against UNC, Kentucky, and Kansas. The UNC blocks require 3 hits to break, Kentucky requires 2, and Kansas requires 1. Powerups are programmed to be randomly assigned to blocks, and will drop if that block is broken. In terms of the actual programming structure, Breakout.java is the main view manager -- controlling most of the steps. Once the game goes to the animated levels, Breakout.java sends the stage control to Levels.java which runs the animations. BlockManager.java exists to track the current state of the blocks. 
+Only I, Henry Taylor, worked on this project. I started Monday the 16th and worked about 15 hours on it. The only resources I used was the Java documentation. The class that runs the program is Main.java. The only other resources needed are the images in the images folder. 
+The only bug I found is sometimes the ball gets stuck on the platform, but I think that has to do with the pixel size rather than the programming. I felt like I did well, but I need to spend more time planning how I will organize all my classes. 
 
-
-Level 1: Normal ball speed and platform size. Level 2: Normal Ball speed, platform is smaller. Level 3: Faster ball and smaller platform. 
 
 Cheat Codes:
 W: Win Instantly
