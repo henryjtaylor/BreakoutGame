@@ -89,9 +89,7 @@ public class Levels {
     	makeLives();
     	makeLevelBar();
     	root.getChildren().add(myPoints);
-    	
-    	
-    	
+   
     	if (LEVEL == 3) {
     		BALL_SPEED = 120;
     	} else {
@@ -99,11 +97,8 @@ public class Levels {
     	}
     	
     	BLOCKMANAGER = new BlockManager(NUMBER_OF_BLOCKS, SIZE, BBALL.getFitWidth());
-    	
     	setBlocks(NUMBER_OF_BLOCKS);
-    	
     	myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
- 
     	return myScene;
     }
     
@@ -134,8 +129,7 @@ public class Levels {
     }
      
     private void moveStuckBall(double time) {
-    	BBALL.setX(BBALL.getX() + PLATFORM_DIRECTION * time * PLATFORM_SPEED);
-    	
+    	BBALL.setX(BBALL.getX() + PLATFORM_DIRECTION * time * PLATFORM_SPEED); 	
     }
     private void movePlatform(double time) {
     	PLATFORM.setX(PLATFORM.getX() + PLATFORM_DIRECTION * time * PLATFORM_SPEED);
@@ -201,8 +195,7 @@ public class Levels {
     		lostLife();
     	}
     	Block hitBrick = BLOCKMANAGER.checkBricks(BBALL.getX(), BBALL.getY());
-    	changeBricks(hitBrick);
-    	
+    	changeBricks(hitBrick);	
     }
     
     
@@ -253,9 +246,9 @@ public class Levels {
     			}
     		}
     		
-    	}
-    	
+    	}	
     }
+    
     private void handlePowerCollision() {
     	root.getChildren().remove(POWERUP.getImage());
     	if (POWERUP.getPower() == 1) {
@@ -346,10 +339,8 @@ public class Levels {
     	if (NUMBER_OF_LIVES == 0) {
     		returnToMain();
     	} else {
-	    	//returnToMain();
 	    	NUMBER_OF_LIVES -= 1;
 	    	root.getChildren().remove(LIVES[NUMBER_OF_LIVES]);
-	    	//BALL_SPEED = 0;
 	    	reset();
     	}
     }

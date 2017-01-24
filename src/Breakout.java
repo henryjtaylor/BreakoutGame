@@ -1,3 +1,5 @@
+//This entire file is a part of my masterpiece
+//Henry Taylor
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,35 +42,27 @@ public class Breakout{
 	
 	private void informationPage() {
 		root.getChildren().clear();
-		makeIntroLabel();
+		makeLabel(getIntro());
 		makeIntroButton();
 	}
 	
 	private void directionPage() {
 		root.getChildren().clear();
-		makeDirectionLabel();
+		makeLabel(getDirect());
 		makeDirectionButton();
 	}
 	
 	private void selectLevel(int level) {
 		root.getChildren().clear();
-		//Levels setLevel = new Levels();
 		Scene sceneTwo = myLevel.init(myScene, myStage, level, SIZE, this);
 		myStage.setScene(sceneTwo);
 		myStage.show();
 	}
-	
-	private void makeIntroLabel() {
-		Label label = new Label(getIntro());
+
+	private void makeLabel(String string) {
+		Label label = new Label(string);
 		positionLabel(SIZE/10, SIZE/10, root, label);
-	}
-	
-	private void makeDirectionLabel() {
-		Label label = new Label(getDirect());
-		positionLabel(SIZE/10, SIZE/10, root, label);
-		
-	}
-	
+	}	
 	
 	private void makeIntroButton() {
 		Button button = makeButton(SIZE/2, SIZE-50, root, "NEXT");
@@ -82,8 +76,7 @@ public class Breakout{
 	private void makeDirectionButton() {
 		Button button = makeButton(SIZE/2, SIZE-50, root, "LEVEL ONE!");
 		button.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				
+			public void handle(ActionEvent event) {	
 				root.getChildren().clear();
 				selectLevel(1);
 			}
@@ -101,7 +94,6 @@ public class Breakout{
 		Button button = new Button();
 		button.setTranslateX(x-100/2);
 		button.setTranslateY(y);
-		//r.getChildren().add(button);
 		button.setText(str);
 		button.setMaxWidth(100);
 		r.getChildren().add(button);
@@ -118,20 +110,19 @@ public class Breakout{
 			positionLabel(SIZE/2, SIZE/2, root, label);
 			Button button = makeButton(SIZE/2, SIZE-50, root, "LET'S GO!");
 			button.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					
+				public void handle(ActionEvent event) {	
 					root.getChildren().clear();
 					selectLevel(newLevel);
 				}
 			});
 		}
-		
 	}
 	
 	public void handleGameOver() {
 		Label label = new Label("YOU WON! GO DUKE!");
 		positionLabel(SIZE/2, SIZE/2, root, label);
 	}
+	
 	public void handlePlayerLost(){
 		root.getChildren().clear();
 		Label label = new Label("GAME OVER");
@@ -144,9 +135,6 @@ public class Breakout{
 		});
 		
 	}
-	
-	
-	
 	
 	private String getIntro() {
 		String str = "Welcome Coach of the Duke Basketball Team!\n"
