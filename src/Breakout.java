@@ -1,6 +1,16 @@
 //This entire file is a part of my masterpiece
 //Henry Taylor
 
+/**
+ * Essentially the Scene Manager. Shows the different pages, and transitions to Levels 
+ * when player reaches the animated stage. Between each level and once a player loses/wins,
+ * code is sent back to Breakout for the next stage to be prepared. I think this code is 
+ * written well because it is very clean, very little repeats (the only repeats were repeats
+ * that couldn't be avoided). In addition, it is well organized going down -- starts with 
+ * all the methods that call a page, then goes down to the helper functions that make
+ * those pages. This segment of code is also integral for the program as a whole
+ */
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
